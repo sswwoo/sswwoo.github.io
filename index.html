@@ -1,0 +1,743 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seungwoo Lee — PhD Student @ KAIST</title>
+  <meta name="description" content="Personal website of Seungwoo Lee — researcher and engineer.">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%231D6FD8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='central' text-anchor='middle' font-family='Georgia,serif' font-size='14' font-weight='bold' fill='white'%3ESW%3C/text%3E%3C/svg%3E">
+  <script>
+    (function() {
+      var stored = localStorage.getItem('theme');
+      var system = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      document.documentElement.dataset.theme = stored || system;
+    })();
+  </script>
+  <style>
+    /* ── Reset ──────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    img { max-width: 100%; display: block; }
+
+    /* ── Design tokens ──────────────────────── */
+    :root {
+      --max-w:     860px;
+      --bg:        #F4F5F7;
+      --surface:   #FFFFFF;
+      --accent:    #1D6FD8;
+      --accent-lt: rgba(29, 111, 216, 0.09);
+      --t1:        #111827;
+      --t2:        #4B5563;
+      --t3:        #9CA3AF;
+      --border:    #E2E8F0;
+      --hero-bg:   linear-gradient(150deg, #FAFBFE 0%, #EEF3FA 100%);
+      --nav-bg:    rgba(255, 255, 255, 0.88);
+      --thumb-bg:  #E9EEF5;
+    }
+
+    [data-theme="dark"] {
+      --bg:        #0F1117;
+      --surface:   #181B25;
+      --accent:    #5A9CF0;
+      --accent-lt: rgba(90, 156, 240, 0.12);
+      --t1:        #E8EDF3;
+      --t2:        #8B95A1;
+      --t3:        #535B66;
+      --border:    #252A36;
+      --hero-bg:   linear-gradient(150deg, #0D1520 0%, #0F1B2A 100%);
+      --nav-bg:    rgba(13, 15, 21, 0.90);
+      --thumb-bg:  #1C2133;
+    }
+
+    /* ── Base ───────────────────────────────── */
+    body {
+      background: var(--bg);
+      color: var(--t1);
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    /* ── Hero ───────────────────────────────── */
+    .hero {
+      background: var(--hero-bg);
+      border-bottom: 1px solid var(--border);
+      padding: 2rem 0 2.25rem;
+    }
+
+    .hero-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .avatar-wrap {
+      flex-shrink: 0;
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      overflow: hidden;
+      border: 2px solid var(--border);
+      background: var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* Shown when profile photo is missing */
+    .avatar-initials {
+      display: none;
+      font-family: Georgia, 'Book Antiqua', Palatino, serif;
+      font-size: 2.4rem;
+      color: var(--t3);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-info { min-width: 0; }
+
+    .hero-name {
+      font-family: Georgia, 'Book Antiqua', Palatino, serif;
+      font-size: 2.4rem;
+      font-weight: normal;
+      color: var(--t1);
+      letter-spacing: -0.015em;
+      line-height: 1.1;
+      text-wrap: balance;
+      margin-bottom: 0.35rem;
+    }
+
+    .hero-role {
+      font-size: 0.8rem;
+      color: var(--t3);
+      /* text-transform: uppercase; */
+      letter-spacing: 0.13em;
+      margin-bottom: 0.25rem;
+    }
+
+    .hero-affil {
+      font-size: 1rem;
+      color: var(--t2);
+      margin-bottom: 1.2rem;
+    }
+
+    .hero-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.45rem 1.1rem;
+      list-style: none;
+    }
+
+    .hero-links a {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      text-decoration: none;
+      color: var(--t3);
+      font-size: 0.83rem;
+      letter-spacing: 0.02em;
+      transition: color 0.18s;
+    }
+
+    .hero-links a:hover { color: var(--accent); }
+    .hero-links a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+
+    .hero-links svg {
+      width: 15px;
+      height: 15px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Sticky nav ─────────────────────────── */
+    .site-nav {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: var(--nav-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .site-nav-inner {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      gap: 2rem;
+      height: 46px;
+      align-items: center;
+      justify-content: flex-end;
+    }
+
+    .site-nav a {
+      text-decoration: none;
+      color: var(--t2);
+      font-size: 0.84rem;
+      letter-spacing: 0.04em;
+      transition: color 0.15s;
+    }
+
+    .site-nav a:hover { color: var(--accent); }
+    .site-nav a:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 2px; }
+    .site-nav a.active { color: var(--accent); font-weight: 500; }
+
+    /* ── Main layout ────────────────────────── */
+    main {
+      max-width: var(--max-w);
+      margin: 0 auto;
+      padding: 0 2rem 5rem;
+    }
+
+    .section {
+      padding-top: 3rem;
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+    }
+
+    .section:first-child {
+      border-top: none;
+      margin-top: 0;
+      padding-top: 2.5rem;
+    }
+
+    .section-label {
+      font-size: 0.71rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--accent);
+      margin-bottom: 1.25rem;
+    }
+
+    /* ── About ──────────────────────────────── */
+    .about-text {
+      color: var(--t2);
+      font-size: 1rem;
+      line-height: 1.8;
+    }
+
+    .about-text + .about-text { margin-top: 0.8rem; }
+
+    .about-text a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-lt);
+      transition: border-color 0.15s;
+    }
+
+    .about-text a:hover { border-bottom-color: var(--accent); }
+
+    /* ── Education ──────────────────────────── */
+    .edu-list {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .edu-item {
+      display: grid;
+      grid-template-columns: 100px 1fr;
+      gap: 1rem;
+    }
+
+    .edu-years {
+      font-size: 0.79rem;
+      color: var(--t3);
+      padding-top: 0.18rem;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.03em;
+    }
+
+    .edu-degree {
+      font-size: 0.96rem;
+      font-weight: 600;
+      color: var(--t1);
+      margin-bottom: 0.1rem;
+      line-height: 1.35;
+    }
+
+    .edu-school {
+      font-size: 0.89rem;
+      color: var(--t2);
+    }
+
+    .edu-field {
+      font-size: 0.83rem;
+      color: var(--t3);
+      margin-top: 0.1rem;
+    }
+
+    /* ── Publications ───────────────────────── */
+    .pub-list {
+      list-style: none;
+    }
+
+    .pub-item {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 1.25rem;
+      padding: 1.5rem 0.75rem;
+      margin: 0 -0.75rem;
+      border-bottom: 1px solid var(--border);
+      align-items: stretch;
+      border-radius: 8px;
+      transition: background 0.15s;
+    }
+
+    .pub-item:last-child { border-bottom: none; }
+    .pub-item:hover { background: var(--surface); }
+
+    .pub-thumb {
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background: var(--thumb-bg);
+      min-height: 110px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: transform 0.2s ease;
+    }
+
+    .pub-item:hover .pub-thumb { transform: scale(1.02); }
+
+    .pub-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .pub-thumb-placeholder {
+      width: 28px;
+      height: 28px;
+      opacity: 0.25;
+      fill: var(--t1);
+    }
+
+    .pub-body { min-width: 0; }
+
+    .pub-title {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--t1);
+      line-height: 1.45;
+      margin-bottom: 0.25rem;
+    }
+
+    .pub-title a {
+      text-decoration: none;
+      color: inherit;
+      transition: color 0.15s;
+    }
+
+    .pub-title a:hover { color: var(--accent); }
+
+    .pub-authors {
+      font-size: 0.85rem;
+      color: var(--t2);
+      margin-bottom: 0.5rem;
+    }
+
+    .pub-meta {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 0.65rem;
+    }
+
+    .pub-venue {
+      display: inline-block;
+      font-size: 0.75rem;
+      background: var(--accent-lt);
+      color: var(--accent);
+      border-radius: 3px;
+      padding: 0.15em 0.55em;
+      letter-spacing: 0.04em;
+      font-weight: 500;
+    }
+
+    .pub-links {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+    }
+
+    .pub-link-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+      padding: 0.28em 0.75em;
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      font-size: 0.76rem;
+      color: var(--t2);
+      text-decoration: none;
+      background: var(--surface);
+      transition: border-color 0.15s, color 0.15s;
+      white-space: nowrap;
+    }
+
+    .pub-link-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+    }
+
+    .pub-link-btn svg {
+      width: 12px;
+      height: 12px;
+      fill: currentColor;
+      flex-shrink: 0;
+    }
+
+    /* ── Dark mode toggle ───────────────────── */
+    .theme-toggle {
+      margin-right: auto;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--t3);
+      display: flex;
+      align-items: center;
+      padding: 0.3rem;
+      border-radius: 4px;
+      transition: color 0.15s;
+    }
+
+    .theme-toggle:hover { color: var(--t1); }
+    .theme-toggle:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+    .theme-toggle svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .icon-sun  { display: none; }
+    .icon-moon { display: block; }
+    [data-theme="dark"] .icon-sun  { display: block; }
+    [data-theme="dark"] .icon-moon { display: none; }
+
+    /* ── Footer ─────────────────────────────── */
+    footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 1.5rem 2rem;
+      font-size: 0.79rem;
+      color: var(--t3);
+      border-top: 1px solid var(--border);
+      max-width: var(--max-w);
+      margin: 0 auto;
+    }
+
+    .footer-top {
+      text-decoration: none;
+      color: var(--t3);
+      transition: color 0.15s;
+    }
+
+    .footer-top:hover { color: var(--accent); }
+
+    /* ── Responsive ─────────────────────────── */
+    @media (max-width: 560px) {
+      .hero { padding: 3rem 1.5rem 2.5rem; }
+
+      .hero-inner {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 1.25rem;
+      }
+
+      .avatar-wrap { width: 84px; height: 84px; }
+      .hero-name { font-size: 2rem; }
+
+      .edu-item,
+      .pub-item {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+      }
+
+      .edu-years {
+        color: var(--accent);
+        font-weight: 600;
+        font-size: 0.76rem;
+      }
+
+      .pub-thumb {
+        aspect-ratio: 16 / 9;
+        max-width: 100%;
+      }
+
+      main { padding: 0 1.25rem 4rem; }
+      .site-nav-inner { padding: 0 1.25rem; gap: 1.5rem; }
+    }
+
+    /* ── Reduced motion ─────────────────────── */
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      * { transition: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ── Hero ──────────────────────────────── -->
+  <!-- Profile photo: put your image at images/profile.jpg -->
+  <header class="hero">
+    <div class="hero-inner">
+      <div class="avatar-wrap">
+        <img
+          src="images/profile.jpg"
+          alt="Seungwoo Lee"
+          onerror="this.style.display='none'; document.getElementById('avatar-initials').style.display='block';"
+        >
+        <span class="avatar-initials" id="avatar-initials">SW</span>
+      </div>
+      <div class="hero-info">
+        <h1 class="hero-name">Seungwoo Lee</h1>
+        <p class="hero-role">Ph.D. Student</p>
+        <p class="hero-affil">School of Electrical Engineering, KAIST</p>
+        <ul class="hero-links">
+          <li>
+            <a href="mailto:woo@mmai.io" aria-label="Email">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4-8 5-8-5V6l8 5 8-5v2z"/>
+              </svg>
+              Email
+            </a>
+          </li>
+          <li>
+            <a href="https://github.com/sswwoo" aria-label="GitHub" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 2C6.477 2 2 6.477 2 12c0 4.42 2.865 8.166 6.839 9.489.5.092.682-.217.682-.482 0-.237-.008-.866-.013-1.7-2.782.603-3.369-1.342-3.369-1.342-.454-1.155-1.11-1.462-1.11-1.462-.908-.62.069-.608.069-.608 1.003.07 1.531 1.03 1.531 1.03.892 1.529 2.341 1.087 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.11-4.555-4.943 0-1.091.39-1.984 1.029-2.683-.103-.253-.446-1.27.098-2.647 0 0 .84-.269 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.295 2.747-1.026 2.747-1.026.546 1.377.203 2.394.1 2.647.64.699 1.028 1.592 1.028 2.683 0 3.842-2.339 4.687-4.566 4.935.359.309.678.919.678 1.852 0 1.336-.012 2.415-.012 2.744 0 .267.18.579.688.481C19.138 20.163 22 16.418 22 12c0-5.523-4.477-10-10-10z"/>
+              </svg>
+              GitHub
+            </a>
+          </li>
+          <li>
+            <a href="https://linkedin.com/in/swoolee" aria-label="LinkedIn" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
+              </svg>
+              LinkedIn
+            </a>
+          </li>
+          <li>
+            <a href="https://scholar.google.com/citations?hl=en&user=wxxcAckAAAAJ" aria-label="Google Scholar" target="_blank" rel="noopener noreferrer">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 3 1 9.5l4.5 2.9V18c0 3.3 2.9 6 6.5 6s6.5-2.7 6.5-6v-5.6l1.5-.97V18h2V9.5L12 3zm4.5 14c0 2.2-2 4-4.5 4s-4.5-1.8-4.5-4v-4.35l4.5 2.89 4.5-2.89V17zm-4.5-3.59L3.96 9.5 12 5.09l8.04 4.41L12 13.41z"/>
+              </svg>
+              Scholar
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Sticky nav ────────────────────────── -->
+  <nav class="site-nav" aria-label="Page sections">
+    <div class="site-nav-inner">
+      <button class="theme-toggle" onclick="toggleTheme()" aria-label="Toggle dark mode">
+        <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 3a9 9 0 109 9c0-.46-.04-.92-.1-1.36a5.389 5.389 0 01-4.4 2.26 5.403 5.403 0 01-3.14-9.8c-.44-.06-.9-.1-1.36-.1z"/>
+        </svg>
+        <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M12 7a5 5 0 100 10A5 5 0 0012 7zm0-5a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm0 17a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zm8.66-13.5a1 1 0 010 1.41l-.71.71a1 1 0 11-1.41-1.41l.71-.71a1 1 0 011.41 0zM5.64 18.36a1 1 0 010 1.41l-.71.71a1 1 0 01-1.41-1.41l.71-.71a1 1 0 011.41 0zM21 11h1a1 1 0 110 2h-1a1 1 0 110-2zm-17 0H3a1 1 0 110 2H3a1 1 0 110-2zm14.95 7.05a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41zM6.34 7.05a1 1 0 01-1.41 0l-.71-.71a1 1 0 011.41-1.41l.71.71a1 1 0 010 1.41z"/>
+        </svg>
+      </button>
+      <a href="#about">About</a>
+      <a href="#education">Education</a>
+      <a href="#publications">Publications</a>
+    </div>
+  </nav>
+
+  <!-- ── Content ───────────────────────────── -->
+  <main>
+
+    <!-- About -->
+    <section id="about" class="section">
+      <p class="section-label">About</p>
+      <p class="about-text">
+        I'm a Ph.D. student at KAIST <a href="http://mm.kaist.ac.kr/"
+        target="_blank">Multimodal AI Lab</a>, advised by Professor
+        <a href="http://mm.kaist.ac.kr/joon/" target="_blank">Joon Son Chung</a>.
+        My research focuses on multimodal AI, with a particular interest in
+        grounding physical properties in visual scenes, enabling AI systems to
+        understand not only what objects look like, but also how they hear, feel, smell,
+        and interact with the real world.</p>
+      </p>
+    </section>
+
+    <!-- Education -->
+    <section id="education" class="section">
+      <p class="section-label">Education</p>
+      <ul class="edu-list">
+        <li class="edu-item">
+          <span class="edu-years">2026 – present</span>
+          <div>
+            <p class="edu-degree">Ph.D. in Electrical Engineering</p>
+            <p class="edu-school">KAIST</p>
+            <p class="edu-field">Advisor: Joon Son Chung</p>
+          </div>
+        </li>
+        <li class="edu-item">
+          <span class="edu-years">2024 – 2026</span>
+          <div>
+            <p class="edu-degree">M.S. in Electrical Engineering</p>
+            <p class="edu-school">KAIST</p>
+            <p class="edu-field">Advisor: Joon Son Chung</p>
+          </div>
+        </li>
+        <li class="edu-item">
+          <span class="edu-years">2017 – 2024</span>
+          <div>
+            <p class="edu-degree">B.S. in Electrical Engineering</p>
+            <p class="edu-school">KAIST</p>
+          </div>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Publications -->
+    <section id="publications" class="section">
+      <p class="section-label">Publications</p>
+      <ul class="pub-list">
+
+        <li class="pub-item">
+          <!-- Thumbnail: put image at images/pub1.jpg -->
+          <div class="pub-thumb">
+            <img src="images/seeandsniff.jpg" alt=""
+              onerror="this.style.display='none';">
+            <!-- Fallback icon shown via CSS when no image -->
+            <svg class="pub-thumb-placeholder" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+            </svg>
+          </div>
+          <div class="pub-body">
+            <p class="pub-title"><a href="#">See & Sniff: Learning Visuo-Olfactory Representations</a></p>
+            <p class="pub-authors">Seongyu Kim*, <strong>Seungwoo Lee*</strong>, Hyeonggon Ryu, Joon Son Chung, Arda Senocak</p>
+            <div class="pub-meta">
+              <span class="pub-venue">ECCV 2026</span>
+            </div>
+            <div class="pub-links">
+              <a href="https://arxiv.org/abs/2606.27307" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                Paper
+              </a>
+              <a href="https://mm.kaist.ac.kr/projects/SeeandSniff/" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                Project Page
+              </a>
+              <a href="https://github.com/kaistmm/SeeandSniff" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                Code
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-thumb">
+            <img src="images/seeingthroughtouch.jpg" alt=""
+              onerror="this.style.display='none';">
+            <svg class="pub-thumb-placeholder" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+            </svg>
+          </div>
+          <div class="pub-body">
+            <p class="pub-title"><a href="#">Seeing Through Touch: Tactile-Driven Visual Localization of Material Regions</a></p>
+            <p class="pub-authors">Seongyu Kim, <strong>Seungwoo Lee</strong>, Hyeonggon Ryu, Joon Son Chung, Arda Senocak</p>
+            <div class="pub-meta">
+              <span class="pub-venue">CVPR 2026</span>
+            </div>
+            <div class="pub-links">
+              <a href="https://arxiv.org/abs/2604.11579" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                Paper
+              </a>
+              <a href="https://mm.kaist.ac.kr/projects/SeeingThroughTouch/" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 19H5V5h7V3H5a2 2 0 00-2 2v14a2 2 0 002 2h14a2 2 0 002-2v-7h-2v7zM14 3v2h3.59l-9.83 9.83 1.41 1.41L19 6.41V10h2V3h-7z"/></svg>
+                Project Page
+              </a>
+              <a href="https://github.com/kaistmm/SeeingThroughTouch" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.4 16.6L4.8 12l4.6-4.6L8 6l-6 6 6 6 1.4-1.4zm5.2 0l4.6-4.6-4.6-4.6L16 6l6 6-6 6-1.4-1.4z"/></svg>
+                Code
+              </a>
+            </div>
+          </div>
+        </li>
+
+        <li class="pub-item">
+          <div class="pub-thumb">
+            <img src="images/fastav.jpg" alt=""
+              onerror="this.style.display='none';">
+            <svg class="pub-thumb-placeholder" viewBox="0 0 24 24" aria-hidden="true">
+              <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/>
+            </svg>
+          </div>
+          <div class="pub-body">
+            <p class="pub-title"><a href="#">FastAV: Efficient Token Pruning for Audio-Visual Large Language Model Inference</a></p>
+            <p class="pub-authors">Chaeyoung Jung, Youngjoon Jang, <strong>Seungwoo Lee</strong>, Joon Son Chung</p>
+            <div class="pub-meta">
+              <span class="pub-venue">ICASSP 2026</span>
+            </div>
+            <div class="pub-links">
+              <a href="https://arxiv.org/abs/2601.13143" class="pub-link-btn" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6zm-1 1.5L18.5 9H13V3.5zM6 20V4h5v7h7v9H6z"/></svg>
+                Paper
+              </a>
+            </div>
+          </div>
+        </li>
+
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <a href="#" class="footer-top">↑ Top</a>
+    <span>© 2026 Seungwoo Lee</span>
+    <span>Last updated Jun 2026</span>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      var next = document.documentElement.dataset.theme === 'dark' ? 'light' : 'dark';
+      document.documentElement.dataset.theme = next;
+      localStorage.setItem('theme', next);
+    }
+
+    (function() {
+      var sections = document.querySelectorAll('section[id]');
+      var navLinks = document.querySelectorAll('.site-nav a[href^="#"]');
+
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (entry.isIntersecting) {
+            navLinks.forEach(function(a) { a.classList.remove('active'); });
+            var link = document.querySelector('.site-nav a[href="#' + entry.target.id + '"]');
+            if (link) link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-15% 0px -75% 0px' });
+
+      sections.forEach(function(s) { observer.observe(s); });
+    })();
+  </script>
+</body>
+</html>
